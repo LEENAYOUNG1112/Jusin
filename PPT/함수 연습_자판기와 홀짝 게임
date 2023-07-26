@@ -1,0 +1,338 @@
+#include <iostream>
+
+using namespace std;
+
+// 1. 주석 많이 활용하기
+// 2. 좀더 깔끔하고 읽을 수 있는 코드로
+
+// Header File (함수 선언문)
+void GameStart(); 
+bool UseGame(int);
+void ChoiceGame();
+
+// 주사위 게임
+void StartDiceGame();
+void StartHandGame();
+
+void DiceInGame();
+int ChoiceDice(int);
+
+int ChoiceOdd(int, int);
+int ChoiceEven(int, int);
+
+//가위 바위 보 게임
+int HandGame(int);
+int InGame(int, int);
+
+int Scissors(int);
+int Rock(int);
+int Paper(int);
+
+int main()
+{
+	GameStart();
+}
+
+
+// cqq File (함수 정의문)
+
+///<summary> "게임을 시작하시겠습니까? Y/N"</summary>
+void GameStart()
+{
+	system("cls");
+	int iChoice;
+
+	cout << "■ 게임을 시작하시겠습니까? ■" << endl;
+	cout << "[1] YES" << endl;
+	cout << "[2] NO" << endl;
+
+	cin >> iChoice;
+	if (UseGame(iChoice))
+	{
+		ChoiceGame();
+	}
+
+}
+
+
+///<summary> "시작하겠습니다 T/F"</summary>
+bool UseGame(int bGameStart)
+{
+	int iChoice = bGameStart;
+
+	if (iChoice == 1)
+		return true;
+	else
+		return false;
+}
+
+///<summary> "게임 선택분기점"</summary>
+void ChoiceGame()
+{
+	int iChoice;
+
+	system("cls");
+	cout << "■ 어떤 게임을 선택하시겠습니까? ■" << endl;
+	cout << "[1] 주사위 게임" << endl;
+	cout << "[2] 가위 바위 보" << endl;
+	cin >> iChoice;
+
+	if (iChoice == 1)
+		StartDiceGame();
+	else if (iChoice == 2)
+		StartHandGame();
+}
+
+///<summary> "주사위 게임 시작"</summary>
+void StartDiceGame()
+{
+	int iRound(3);
+	cout << "■ 주사위 게임을 시작하겠습니다 ■" << endl;
+	cout << endl;
+	
+	while (iRound > 0) // 3 라운드 시 종료
+	{
+		--iRound;
+		DiceInGame();
+		
+	}
+	GameStart();
+}
+
+///<summary> "홀/짝?"</summary>
+void DiceInGame()
+{
+	int iChoice;
+	
+
+	cout << "어떤 것을 고르시겠습니까?" << endl;
+	cout << "[1] 홀수" << endl;
+	cout << "[2] 짝수" << endl;
+
+	cin >> iChoice;
+	ChoiceDice(iChoice);
+
+}
+
+///<summary> "주사위 선택 시, "</summary>
+int ChoiceDice(int bChoice)
+{
+	int iChoice = bChoice;
+	int iLose(0);
+	int iWin(0);
+
+	if (iChoice == 1)
+	{
+		ChoiceOdd(iLose, iWin);   // 홀수 선택
+
+	}
+	else if(iChoice == 2)
+	{
+		ChoiceEven(iLose, iWin); // 짝수 선택
+;	}
+
+	return 0;
+}
+
+///<summary> "홀수의 경우"</summary>
+
+int ChoiceOdd(int bLose, int bWin)
+{
+	int iLose = bLose;
+	int iWin = bWin;
+	
+
+	srand(unsigned(time(NULL)));
+
+	if ((rand() % 10 + 1) % 2 == 0) 
+	{
+		cout << "■ 패배" << endl;
+		cout << " " << endl;
+
+		++iLose;
+	}
+	else
+	{
+		cout << "■ 승리" << endl;
+		cout << " " << endl;
+
+		++iWin;
+	}
+	
+	system("pause");
+
+
+	return 0;
+}
+
+///<summary> "짝수의 경우"</summary>
+int ChoiceEven(int bLose, int bWin)
+{
+	int iLose = bLose;
+	int iWin = bWin;
+
+	srand(unsigned(time(NULL)));
+
+	if ((rand() % 10 + 1) % 2 == 0)
+	{
+		cout << "■ 승리" << endl;
+		cout << " " << endl;
+		++iWin;
+	}
+	else
+	{
+		cout << "■ 패배" << endl;
+		cout << " " << endl;
+		++iLose;
+	}
+
+	return 0;
+
+	system("pause");
+	
+
+}
+
+
+///<summary> "가위 바위 보 게임"</summary>
+void StartHandGame()
+{
+	int iCnt(0);
+
+	while (iCnt < 3)
+	{
+		iCnt++;
+		HandGame(iCnt);
+	}
+	GameStart();
+	
+}
+
+///<summary> "가위 바위 보 게임 시작 : 선택지"</summary>
+int HandGame(int bCnt)
+{
+	cout << " " << endl;
+	int iCnt = bCnt;
+	cout << "제 " << iCnt << " 회" << endl;
+
+	int iChoice(0);
+	iChoice++;
+	cout << endl;
+	cout << "무엇을 선택하시겠습니까?" << endl;
+	cout << "[1] 가위" << endl;
+	cout << "[2] 바위" << endl;
+	cout << "[3] 보" << endl;
+
+	cout << "> ";
+	cin >> iChoice;
+
+	InGame(iChoice, iCnt);
+
+	return 0;
+
+}
+
+
+///<summary> "시스템의 선택 : 내 선택에 따른 분기점"</summary>
+int InGame(int bChoice, int bCnt)
+{
+	int iChoice = bChoice;
+	int iCnt = bCnt;
+
+	iCnt++;
+
+	if (iChoice == 1)
+		Scissors(iChoice);
+	else if (iChoice == 2)
+		Rock(iChoice);
+	else if (iChoice == 3)
+		Paper(iChoice);
+		
+	return 0;
+}
+
+///<summary> "가위의 경우"</summary>
+int Scissors(int bChoice)
+{
+	int iChoice = bChoice;
+	srand(unsigned(time(NULL)));
+
+	if ((rand() % 3) == 0)
+	{
+		cout << "■ 시스템이 가위를 냈습니다" << endl;
+		cout << "■ 비겼습니다" << endl;
+			
+	}
+	else if ((rand() % 3) == 1)
+	{
+		cout << "■ 시스템이 바위를 냈습니다" << endl;
+		cout << "■ 졌습니다.." << endl;
+	}
+	else
+	{
+		cout << "■ 시스템이 보를 냈습니다" << endl;
+		cout << "■ 이겼습니다!" << endl;
+	}
+		
+	system("pause");
+	return 0;
+
+}
+
+///<summary> "바위의 경우"</summary>
+int Rock(int bChoice)
+{
+	int iChoice = bChoice;
+	srand(unsigned(time(NULL)));
+
+	if ((rand() % 3) == 0)
+	{
+		cout << "■ 시스템이 가위를 냈습니다" << endl;
+		cout << "■ 이겼습니다!" << endl;
+
+	}
+	else if ((rand() % 3) == 1)
+	{
+		cout << "■ 시스템이 주먹을 냈습니다" << endl;
+		cout << "■ 비겼습니다" << endl;
+	}
+	
+	else
+	{
+		cout << "■ 시스템이 보를 냈습니다" << endl;
+		cout << "■ 졌습니다.." << endl;
+	}
+		
+	system("pause");
+	return 0;
+
+}
+
+///<summary> "보의 경우"</summary>
+int Paper(int bChoice)
+{
+	int iChoice = bChoice;
+	srand(unsigned(time(NULL)));
+	
+	if ((rand() % 3) == 0)
+	{
+		cout << "■ 시스템이 가위를 냈습니다" << endl;
+		cout << "■ 졌습니다.." << endl;
+
+	}
+	else if ((rand() % 3) == 1)
+	{
+		cout << "■ 시스템이 바위를 냈습니다" << endl;
+		cout << "■ 이겼습니다!" << endl;
+	}
+
+	else
+	{
+		cout << "■ 시스템이 보를 냈습니다" << endl;
+		cout << "■ 비겼습니다" << endl;
+	}
+	system("pause");
+
+		
+	return 0;
+}
