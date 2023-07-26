@@ -1,0 +1,314 @@
+#include<iostream>
+// 철저하게... 짜야돼... 
+//변수를 하나에 모아둬야 하나?
+using namespace std;
+
+// 게임 시작
+void GameStart();
+void UseCan();
+bool UseChoice(int use);
+
+// 상태창
+int GameStartState();
+int PlayerState(int* iCurrentCoin, int* iHp, int* iAttack, int* iDefence);
+void GameStateBar(int* pCurrentCoin, int* pHp, int* pAttack, int* pDefence);
+
+// 자판기 설정
+int Menu(int* qChoice);
+
+//음료수 계산
+void BeverageCharge(int* iCurrentMoney);
+int GiveMoney(int* qCurrentCoin);
+
+//전투
+void FightStart(int* iChoice);
+int MonsterChoice(int* Choice);
+
+//몬스터
+void CokMonster();
+void CiderMonster();
+void FantaMonster();
+
+// 전투
+void EnterBattle(int* iHp, int* iAttack, int* iDefence);
+void WaitForNextKey();
+
+int main()
+{
+	GameStart();
+}
+
+///<summary> "게임 타이틀"</summary>
+void GameStart()
+{
+	cout << "   ▨▨▨▨▨ 자판기 게임 ▨▨▨▨▨ " << endl;
+	UseCan();
+}
+
+///<summary> "자판기를 이용하시겠습니까?"</summary>
+void UseCan()
+{
+
+	int iUse; // 자판기 사용 여부
+	cout << "▶ 자판기를 이용하시겠습니까? ◀" << endl;
+
+	cout << "[1] YES" << endl;
+	cout << "[2] NO" << endl;
+
+	cin >> iUse;
+	cout << endl;
+
+	if (UseChoice(true))
+	{
+		cout << "▶ 게임 로딩 중 ◀...";
+		cout << endl;
+		system("pause");
+		system("cls");
+		GameStartState();
+	}
+	else if (UseChoice(false))
+		cout << "▶ 종료합니다 ◀...";
+	cout << endl;
+}
+
+///<summary> "자판기 이용 여부 확인"</summary>
+bool UseChoice(int use)
+{
+	if (use == 1) return true;
+	else return false;
+}
+
+///<summary> "원본 게임 스테미나"</summary>
+int GameStartState()
+{
+	int iCurrentCoin;
+	int iHp;
+	int iAttack;
+	int iDefence;
+	int iChoice;
+
+	// 플레이어 확인 상태
+
+	PlayerState(&iCurrentCoin, &iHp, &iAttack, &iDefence);
+	
+	GameStateBar(&iCurrentCoin, &iHp, &iAttack, &iDefence);
+
+	Menu(&iChoice);
+	BeverageCharge(&iCurrentCoin);
+	FightStart(&iChoice);
+
+	return 0;
+}
+
+///<summary> "플레이어 게임 스테미나"</summary>
+int PlayerState(int* pCurrentCoin, int* pHp, int* pAttack, int* pDefence)
+{
+	*pCurrentCoin = 1000;
+	*pHp = 100;
+	*pAttack = 20;
+	*pDefence = 10;
+
+	return 0;
+}
+
+///<summary> "플레이어 현재 상태 확인"</summary>
+void GameStateBar(int* pCurrentCoin, int* pHp, int* pAttack, int* pDefence)
+{
+	WaitForNextKey(); // 이거 어디다 두냐
+	cout << "▶ PLAYER의 현재 상태 ◀" << endl;
+	cout << "▶ Gold : " << *pCurrentCoin << endl;
+	cout << "▶ Hp : " << *pHp << endl;
+	cout << "▶ Attack : " << *pAttack << endl;
+	cout << "▶ Defence : " << *pDefence << endl;
+	cout << endl;
+}
+
+///<summary> "음료수 메뉴판"</summary>
+int Menu(int* qChoice)
+{
+	
+	cout << "▶ 원하는 BEVERAGE 를 뽑아주세요 ◀" << endl;
+	cout << "[1] 콜라 _300G" << endl;
+	cout << "[2] 사이다 _ 600G" << endl;
+	cout << "[3] 환타 _1000G" << endl;
+	cout << "[4] 물 _???G" << endl;
+
+	cin >> *qChoice;
+	cout << endl;
+	return 0;
+
+}
+
+///<summary> "음료수 가격"</summary>
+void BeverageCharge(int* iCurrentMoney)
+{
+	int iCok = 300;
+	int iCider = 600;
+	int iFanta = 1000;
+	int qCurrentMoney = *iCurrentMoney;
+
+	GiveMoney(&qCurrentMoney);
+}
+
+///<summary> "동전 집어넣기"</summary>
+int GiveMoney(int* qCurrentCoin)
+{
+	int iMoney;
+	cout << "▶ 돈을 알맞게 넣어주세요 ◀" << endl;
+	cin >> iMoney;
+	cout << endl;
+
+	if (*qCurrentCoin >= iMoney)
+	{
+		return 0;
+	}
+	else
+	{
+		cout << "▶ 다시 입력해주세요 ◀" << endl;
+		cout << endl;
+		system("pause");
+		system("cls");
+		GameStartState();
+	}
+	return 0;
+}
+
+
+///<summary> "전투 시작"</summary>
+void FightStart(int* qChoice)
+{
+	cout << "▶ 앗! 야생의 음료수가 나타났다! ◀" << endl;
+	cout << endl;
+
+	system("pause");
+
+	int iChoice = *qChoice;
+	MonsterChoice(&iChoice);
+}
+
+// 선택지
+int MonsterChoice(int *iChoice)
+{
+	if (*iChoice == 1)
+		CokMonster();
+	else if (*iChoice == 2)
+		CiderMonster();
+	else if (*iChoice == 3)
+		FantaMonster();
+	else
+		cout << "자판기 작동 불가";
+		return 0;
+}
+
+///<summary> "콜라 정보"</summary>
+void CokMonster()
+{
+	int iHp, iAttack, iDefence;
+	cout << "▶ 콜라가 탄산을 생성중...! (HP:30 / ATT:5 / DEF:0) ◀" << endl;
+	cout << endl;
+
+	iHp = 30;
+	iAttack = 5;
+	iDefence = 0;
+	system("pause");
+
+	EnterBattle(&iHp, &iAttack, &iDefence);
+}
+
+///<summary> "사이다 정보"</summary>
+void CiderMonster()
+{
+	int iHp, iAttack, iDefence;
+	cout << "▶ 사이다가 탄산을 생성중...! (HP:40 / ATT:15 / DEF:5) ◀" << endl;
+	cout << endl;
+
+	iHp = 40;
+	iAttack = 15;
+	iDefence = 5;
+	system("pause");
+
+	EnterBattle(&iHp, &iAttack, &iDefence);
+}
+
+///<summary> "환타 정보"</summary>
+void FantaMonster()
+{
+	int iHp, iAttack, iDefence;
+	cout << "▶ 환타가 탄산을 생성중...! (HP:60 / ATT:20 / DEF:10) ◀" << endl;
+	cout << endl;
+	iHp = 60;
+	iAttack = 20;
+	iDefence = 10;
+	system("pause");
+
+	EnterBattle(&iHp, &iAttack, &iDefence);
+}
+
+///<summary> "전투 정보"</summary>
+void EnterBattle(int* qHp, int* qAttack, int* qDefence)
+{
+	int playerHp = 100;
+	int playerDefence = 100;
+	int playerAttack = 20;
+	while (true)
+	{
+		int damage = playerAttack - *qDefence;
+		if (damage < 0)
+			damage = 0;
+
+		// 선빵
+		*qHp -= damage;
+		if (*qHp < 0)
+			*qHp = 0;
+
+		cout << "▶ 몬스터 남은 체력 : " << *qHp << endl;
+
+		if (*qHp == 0)
+		{
+			cout << endl;
+			cout << "▶ 몬스터를 처치했습니다! ◀" << endl;
+			WaitForNextKey();
+
+			return;
+		}
+		
+		cout << endl;
+		cout << "▶ 아직 싸움이 끝나지 않았습니다! ◀" << endl;
+		cout << endl;
+
+		system("pause");
+		// 반격
+		damage = *qAttack - playerDefence;
+
+		if (damage < 0)
+			damage = 0;
+
+		playerHp -= damage;
+		if (playerHp < 0)
+			playerHp = 0;
+		cout << endl;
+		cout << "▶ 플레이어 남은 체력 : " << playerHp << endl;
+	
+		system("pause");
+		if (playerHp == 0)
+		{
+			cout << endl;
+			cout << endl;
+			cout << "▶ 당신은 사망했습니다... GAME OVER ◀" << endl;
+			WaitForNextKey();
+			return;
+		}
+	}
+}
+
+void WaitForNextKey()
+{
+	cout << "▶ 계속하려면 1을 눌러주세요 ◀" << endl;
+	cout << "> ";
+
+	int input;
+	cin >> input;
+
+	system("cls");
+}
+
