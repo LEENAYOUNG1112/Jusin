@@ -1,2 +1,2 @@
 # Jusin
-Organize the content code you learned in class.
+Review and organize the code you learned in class
