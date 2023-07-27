@@ -1,0 +1,208 @@
+#include <iostream>
+using namespace std;
+
+// 게임 시작
+void PlayerStart();
+
+// Type 결정
+void Player_type();
+void Monster_type();
+
+// 배틀 시작
+void CanStart();
+void Battle();
+
+int main()
+{
+	PlayerStart();
+}
+
+/// <summary> 게임 진행 과정</summary>
+void PlayerStart()
+{
+	cout << "게임에 입장하셨습니다" << endl;
+	system("pause");
+
+	// 플레이어 생성
+	cout << "캐릭터 생성 중..." << endl;
+	Player_type(); 
+
+	// 몹 생성
+	cout << " 던전에 들어가는 중입니다..." << endl;
+	system("pause");
+	cout << " 앗! 몬스터를 발견했다 !" << endl;
+	Monster_type(); // 몬스터 생성
+	cout << endl;
+
+	//전투 시작
+	CanStart();
+
+
+
+}
+/// <summary>하나의 주소에 Player 상태 변환 : int* const monster 변환</summary>
+void Player_type()
+{
+	int iChoice;
+
+	// 기본 상태 값
+	int hp(100);
+	int attack(5);
+	int defence(5);
+
+	// 주소 값을 상수로 만든다
+	int* const php = &hp;
+	int* const pattack = &attack;
+	int* const pdefence = &defence;
+
+	cout << "직업을 골라주세요" << endl;
+	cout << "[1] 기사" << endl;
+	cout << "[2] 궁수" << endl;
+	cout << "[3] 마법사" << endl;
+
+	cin >> iChoice;
+
+	// const pointer을 사용하여 다양한 상태를 변환하도록 하자
+	if (iChoice == 1)
+	{
+		cout << " 기사를 선택하셨습니다 " << endl;
+		*php = 120;
+		*pattack = 20;
+		*pdefence = 3;
+	}
+
+	else if (iChoice == 2)
+	{
+		cout << " 궁수를 선택하셨습니다 " << endl;
+		*php = 80;
+		*pattack = 10;
+		*pdefence = 6;
+	}
+
+	else if (iChoice == 3)
+	{
+		cout << " 마법사를 선택하셨습니다 " << endl;
+		*php = 70;
+		*pattack = 30;
+		*pdefence = 4;
+	}
+
+}
+/// <summary> 하나의 주소에 상태 변환: int* const monster 변환</summary>
+void Monster_type()
+{
+	int randomChoice = 1 + (rand() % 3);
+	
+	// Monster 기본 값
+	int iHp = 100;
+	int iAttack = 3;
+	int iDefence = 5;
+
+	// 주소 값을 상수로 만든다
+	int* const pHp = &iHp;	
+	int* const pAttack = &iAttack;
+	int* const pDefence = &iDefence;
+	
+	// 1. 랜덤으로 적을 뽑을 수 있도록 한다
+	// 2. 적마다 각자 다른 상태를 가질 수 있도록 하자
+	switch (randomChoice)
+	{
+	case 1 : 
+		cout << "슬라임 생성 중... !" << endl;
+		*pHp = 30;
+		*pAttack = 10;
+		*pDefence = 0;
+	case 2 : 
+		cout << "오크 생성 중 .. !" << endl;
+		*pHp = 50;
+		*pAttack = 20;
+		*pDefence = 10;
+	case 3 :
+		cout << " 해골 생성 중 .. !" << endl;
+		*pHp = 70;
+		*pAttack = 30;
+		*pDefence = 20;
+	}
+	
+	
+}
+
+/// <summary> 전투를 시작하시겠습니까?</summary>
+void CanStart()
+{
+	int iChoice;
+
+	cout << " ==== 전투를 시작하시겠습니까? ====" << endl;
+	cout << "[1] 예" << endl;
+	cout << "[2] 아니오 " << endl;
+	cin >> iChoice;
+
+	// 전투를 시작하지만
+	if (iChoice == 1)
+		Battle();
+	else
+		PlayerStart();
+}
+
+
+// 1. 구조 짜는 것에 연연하지 않는다
+// 2. const pointer를 사용하는 방법에 길들인다.
+/// <summary>하나의 공격 변수에 다수의 어택 번갈아서 사용 : const *int attack </summary>
+void Battle()
+{
+	// player Attack 종류 : 상수 주소로 쓸 예정
+	const int ONE_attack = 5;
+	const int TWO_attack = 10;
+	const int THREE_attack = 20;
+	const int FOUR_attack = 30;
+
+	// monster Attack 종류 : 상수 주소로 쓸 예정
+	const int one_monster = 5;
+	const int two_monster = 20;
+	const int three_monster = 30;
+	const int four_monster = 50;
+
+	// 상수 주소 값 : 이 두개의 변수에 주소값을 계속해서 변경한다
+	const int* iPlayerAttack = &ONE_attack;
+	const int* iMonsterAttack = &one_monster;
+
+	int player = 70;
+	int monster = 50;
+
+	// 제대로 작동은 안 할 것이다. 나중에 다시 만들 때는 enum을 활용하여
+	//손쉽게 만들어보도록 하자
+	while (monster > 0)
+	{
+		cout << " PLAYER ATTACK !!!!" << endl;
+		iPlayerAttack = &ONE_attack; // 고정 Player 주소 = 주소 값 1
+		monster -= *iPlayerAttack;
+		cout << " 효과는 엄청났다! [MONSTER - " << monster << " ]" << endl;
+
+		cout << " MONSTER ATTACK !!!!" << endl;
+		iMonsterAttack = &two_monster; // 고정 Monster 주소 = 주소 값 2
+		player -= *iMonsterAttack;
+		cout << " 굉장하게 아프다..! [MONSTER - " << player << " ]" << endl;
+
+		cout << " PLAYER ATTACK !!!!" << endl;
+		iPlayerAttack = &THREE_attack; // 고정 Player 주소 = 주소 값 3
+		monster -= *iPlayerAttack;
+		cout << " 효과는 엄청났다! [MONSTER - " << monster << " ]" << endl;
+
+		cout << " MONSTER ATTACK !!!!" << endl;
+		iMonsterAttack = &four_monster; // 고정 Monster 주소 = 주소 값 4
+		player -= *iMonsterAttack;
+		cout << " 굉장하게 아프다..! [MONSTER - " << player << " ]" << endl;
+	}
+
+	
+}
+
+/// <summary>하나의 변수에 몹 어택만 바꿔서 크리티컬을 바꿔보기</summary>
+// 주소만 바ㅏ꿀 수 있도록 한다
+// 
+//// 어택 관련
+//const int ONE_attack = 5;
+//const int TWO_attack = 10;
+//const int THREE_attack = 15;
+
+
