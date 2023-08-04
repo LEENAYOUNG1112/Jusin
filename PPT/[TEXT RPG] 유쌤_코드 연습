@@ -1,0 +1,170 @@
+#include <iostream>
+
+using namespace std;
+
+typedef struct tag_Info
+{
+	char iName[23];
+	int iHp;
+	int iAttack;
+}INFO;
+
+enum Job
+{
+	WARRIOR = 1,
+	WIZARD,
+	THIEF
+};
+
+
+// 함수
+INFO JobSelect(INFO* Player);
+void StatBar(INFO* info);
+void StatBar(INFO* info);
+void Field(INFO* Player);
+void CreateMonster(INFO* monster);
+int Battle(INFO* Player, INFO* Monster);
+
+int main()
+{
+	INFO Player = {};// 초기화
+	Player = JobSelect(&Player);
+
+	system("cls");
+	int iChoice;
+
+	StatBar(&Player);
+
+	cout << "1. 사냥터" << "\t" << "2. 종료" << endl;
+	cin >> iChoice;
+	
+	switch (iChoice)
+	{
+	case 1 :
+		Field(&Player);
+		break;
+	case 2 :
+		return 0;
+	default : 
+		return 0;
+	}
+}
+
+INFO JobSelect(INFO* Player)
+{
+	int iChoice;
+
+	cout << " 1. 워리어\t2.위자드\t3.도적." << endl;
+	cin >> iChoice;
+
+	switch (iChoice)
+	{
+	case WARRIOR:
+		strcpy_s(Player->iName, sizeof(Player->iName), "워리어");
+		Player->iAttack = 10;
+		Player->iHp = 100;
+		break;
+
+	case WIZARD:
+		strcpy_s(Player->iName, sizeof(Player->iName), "위자드");
+		Player->iAttack = 10;
+		Player->iHp = 100;
+		break;
+
+	case THIEF:
+		strcpy_s(Player->iName, sizeof(Player->iName), "도적");
+		Player->iAttack = 10;
+		Player->iHp = 100;
+		break;
+	}
+
+	return *Player; // Player를 넘겨받을 수 있구나
+}
+
+
+void StatBar(INFO* info) // 몬스터도 포인터로 주고 받았으니 플레이어도 포인터로 주고 받자
+{
+	cout << "이름 : " << info->iName << endl;
+	cout << "체력 :" << info->iHp << "\t" << "공격력 : " << info->iAttack << endl;
+	cout << "===========================" << endl;
+
+}
+
+void Field(INFO* Player)
+{
+	INFO MONSTER[3] = {};
+	system("cls");
+	int iChoice;
+	StatBar(Player);
+	while (1)
+	{
+		cout << "1. 초급\t" << "2. 중급\t" << "3. 고급\t" << "4. 되돌아가기" << endl;
+		cin >> iChoice;
+	
+		if (iChoice > 3)
+			return; // return 은 되돌아가는 거 return 0 은 값을 넘기는 거
+
+		else if (iChoice < 4)
+		{
+			CreateMonster(MONSTER);
+			Battle(Player, &MONSTER[iChoice - 1]); // 해당 초이스 -1 의 배열의 주소를 건네준다
+			
+		}
+	}
+}
+
+void CreateMonster(INFO* monster)
+{
+	// 이름
+	strcpy_s(monster[0].iName, sizeof(monster[0].iName), "초급");
+	strcpy_s(monster[1].iName, sizeof(monster[1].iName), "중급");
+	strcpy_s(monster[2].iName, sizeof(monster[2].iName), "고급");
+	// 배열은 포인터랑 상관 없어 점찍기
+
+	for (int i = 0; i < 3; i++)
+	{
+		monster[i].iHp = (i + 1) * 30;
+		monster[i].iAttack = i + 1;
+	}
+}
+
+int Battle(INFO* Player, INFO* Monster)
+{	
+	int iChoice;
+	while(true)
+	{
+		system("cls");
+		StatBar(Player);
+		StatBar(Monster);
+
+		cout << "1. 공격 \t" << "2. 도망" << endl;
+		cin >> iChoice;
+		if(iChoice == 1)
+		{
+			Player->iHp -= Monster->iAttack;
+			Monster->iHp -= Player->iAttack;
+
+			if (Player->iHp <= 0)
+			{
+				cout << "LOSE" << endl;
+				Player->iHp = 100;
+				system("pause");
+				system("cls");
+				break;
+			}
+			else if (Monster->iHp <= 0)
+			{
+				cout << "WIN" << endl;
+				system("pause");
+				system("cls");
+				break;
+			}
+		}
+		else if (iChoice == 2)
+			return 0;
+		system("pause");
+		
+	}
+	
+	
+}
